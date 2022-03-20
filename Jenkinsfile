@@ -6,7 +6,7 @@ pipeline {
                 echo 'Hello world!' 
                  sh 'php --version'
                  
-                sh 'vendor/bin/phpunit --bootstrap build/bootstrap.php --configuration phpunit-coverage.xml'
+                sh 'vendor/bin/phpunit tests/ValidatePassTest.php'
             }
         }
         
