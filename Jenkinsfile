@@ -27,96 +27,92 @@
 */
 
 
-stage("Setup Project") {
-    node() {
-       sh "ls -lah"
-       // clean out all files within this workspace
-       deleteDir()
+pipeline {
+  agent any
 
-       sh "ls -lah"
+  options {
+    disableConcurrentBuilds()
+    timeout(time: 30, unit: 'MINUTES')
+  }
 
-       // Check out our repository
-        git branch: "main", url: "git@github.com:Project-Management-SCE/PM2022_TEAM_13.git", credentialsId: "jenkinskey"
+  environment {
+    PATH = "vendor/bin:/var/lib/jenkins/.composer/vendor/bin:$PATH"
+  }
 
-       // Composer install
-       sh "composer install --prefer-dist --optimize-autoloader"
+  stages {
+    stage('prepare') {
+      steps {
+        slackSend channel: '#<channel>',
+                  message: "Build started: ${currentBuild.fullDisplayName} (<${env.RUN_DISPLAY_URL}|Open>)"
 
-       // Stash our whole project files for later use
-       stash "project_files"
-    }
-}
+        sh 'mkdir -p build/api build/code-browser build/coverage build/logs build/pdepend} || true'
+        sh "composer install"
+      }
+    } // stage prepare
 
-stage("Tests [Unit]") {
-
-    parallel (
-       /*
-        because we're working in parallel here, we won't necessarily have the files we need for each parallel node
-        we'll unstash them in each node to make sure we have the files we require
-       */
-       phpunit: {
-          node {
-             unstash "project_files"
-             sh "bin/phpunit"
+    stage('analysis') {
+      steps {
+        parallel (
+          lint: {
+            sh 'parallel-lint -s <src>'
+          },
+          phpmd: {
+            sh 'phpmd <src> xml build/phpmd.xml --reportfile build/logs/pmd.xml --suffixes php --ignore-violations-on-exit'
+          },
+          phpcs: {
+            sh 'phpcs --report=checkstyle --report-file=build/logs/phpcs-checkstyle.xml --standard=phpcs.xml --extensions=php --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 <src>'
+          },
+          phpcpd: {
+            sh 'phpcpd --log-pmd build/logs/pmd-cpd.xml <src> || true'
+          },
+          pdepend: {
+            sh 'pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg <src> || true'
           }
-       },
-       phpspec: {
-          node {
-             unstash "project_files"
-             sh "bin/phpspec run"
-          }
+        )
+      }
+
+      post {
+       success {
+         pmd canComputeNew: false, defaultEncoding: '', healthy: '70', pattern: 'build/logs/pmd.xml', unHealthy: '999'
+         checkstyle canComputeNew: false, defaultEncoding: '', healthy: '100', pattern: 'build/logs/*-checkstyle.xml', unHealthy: '999'
+         dry canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'build/logs/pmd-cpd.xml', unHealthy: ''
        }
-    )
-}
+     }
+   } // stage analysis
 
-stage("Tests [Acceptance]") {
-    node {
-       unstash "project_files"
-       sh "bin/behat"
-   }
-}
+    stage('test') {
+      steps {
+        sh "phpunit -c phpunit.xml.dist --coverage-html build/coverage --coverage-clover build/logs/clover.xml --coverage-crap4j build/logs/crap4j.xml --log-junit build/logs/junit.xml"
+      }
 
-stage("Deploying to UAT") {
-    node {
-        def gitCommit = gitCommit()
-        ansiblePlaybook playbook: "ansible/deploy-uat.yml", inventory: "ansible/inventories/uat", extraVars: [release_version: "$gitCommit", secret_thing: [value: 'mySecretValue', hidden: true]]
+      post {
+        success {
+          junit 'build/logs/junit.xml'
+          publishHTML(allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'build/coverage', reportFiles: 'index.html', reportName: 'PHP code coverage', reportTitles: 'Code Coverage')
+        }
+      }
+    } // stage test
+  }
+
+  post {
+    success {
+      slackSend channel: '#<channel>',
+                color: 'good',
+                message: "${currentBuild.fullDisplayName} completed successfully after ${currentBuild.durationString}. (<${env.RUN_DISPLAY_URL}|Open>)"
     }
-}
-
-stage("Approval [UAT]") {
-    // Make sure that you don't ask for input, or use a timeout within a node, it can tie up that node for the duration.
-    timeout(time: 7, unit: 'DAYS') {
-      input message: 'Does http://jenkins-workshop.uat look okay?'
+    failure {
+      slackSend channel: '#<channel>',
+                color: 'danger',
+                message: "@channel ${currentBuild.fullDisplayName} failed after ${currentBuild.durationString}. (<${env.RUN_DISPLAY_URL}|Open>)"
     }
-}
-
-stage("Deploy to production") {
-    timeout(time: 7, unit: 'DAYS') {
-        input message: 'Go ahead with the deployment to production?'
+    unstable {
+      slackSend channel: '#<channel>',
+                color: 'warning',
+                message: "${currentBuild.fullDisplayName} passed after ${currentBuild.durationString}, but is unstable. (<${env.RUN_DISPLAY_URL}|Open>)"
     }
-
-    node {
-        def gitCommit = gitCommit()
-        ansiblePlaybook playbook:"ansible/deploy-prod.yml", inventory: "ansible/inventories/prod", extraVars: [release_version: "$gitCommit"]
+    aborted {
+      slackSend channel: '#<channel>',
+                message: "Build aborted: ${currentBuild.fullDisplayName} (<${env.RUN_DISPLAY_URL}|Open>)"
     }
-}
-
-/*
-def to = emailextrecipients([
-        [$class: 'CulpritsRecipientProvider'],
-        [$class: 'DevelopersRecipientProvider'],
-        [$class: 'RequesterRecipientProvider']
-])
-if(to != null && !to.isEmpty()) {
-    mail to: to, subject: "Vagrant Test has finished with ${currentBuild.result}",
-            body: "See ${env.BUILD_URL}"
-}
-*/
-
-// Helper function to get the commit hash of the latest commit within git
-def gitCommit() {
-    sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-}
-
-def shortGitCommit() {
-    gitCommit().take(6)
+  }
 }
