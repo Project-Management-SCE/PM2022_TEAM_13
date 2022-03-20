@@ -1,24 +1,4 @@
-pipeline {
-    agent { docker { image 'composer' } }
-    environment { HOME = '.' }
-    stages {
-        stage('build') {
-            steps {
-                git branch: "main", url: "git@github.com:Project-Management-SCE/PM2022_TEAM_13.git", credentialsId: "jenkinskey"
-                sh 'composer install'
-                sh 'cp .env.example .env'
-                sh 'php artisan key:generate'
-            }
-        }
-        stage('test') {
-            steps {
-                sh 'vendor/bin/phpunit'    
-            }
-        }
-    }
-}
-
-/*node {
+node {
     
    stage('Clone repo') {
         git branch: "main", url: "git@github.com:Project-Management-SCE/PM2022_TEAM_13.git", credentialsId: "jenkinskey"
@@ -37,9 +17,7 @@ pipeline {
     }
     stage('test') {
          
-        sh "ls -al"
-        sh 'cd src ;./vendor/bin/phpunit --log-junit=storage/logs/unitreport'
-        echo 'Testing'
+         sh 'vendor/bin/phpunit' 
       
         }
     stage('Deploy') {
@@ -51,5 +29,5 @@ pipeline {
     }
       
     
-}*/
+}
 
