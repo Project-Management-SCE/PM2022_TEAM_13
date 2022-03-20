@@ -17,16 +17,10 @@ node {
     }
     stage('test') {
          
-         sh 'vendor/bin/phpunit' 
+        sh './vendor/phpunit/phpunit/phpunit --configuration phpunit-no-coverage-unit-only.xml --no-coverage --log-junit build/logs/junit.xml'
       
         }
-    stage('Deploy') {
-     
-        sh "/var/lib/jenkins/shells/deploy.php"
-        echo 'Deployed'
-      
     
-    }
       
     
 }
