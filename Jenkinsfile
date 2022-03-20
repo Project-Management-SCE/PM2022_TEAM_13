@@ -1,11 +1,51 @@
-node {
-    stage("composer_install") {
-        // Run `composer update` as a shell script
-        sh 'composer install'
-    }
-    stage("phpunit") {
-        // Run PHPUnit
-        sh 'vendor/bin/phpunit'
+pipeline {
+
+    agent any
+
+    stages {
+        stage ('Build') {
+            steps {
+                sh '''
+                    cd symfony && composer install --prefer-dist
+                    ./vendor/bin/pcov clobber
+                '''
+            }
+        }
+
+        stage('PHP CodeSniffer') {
+            steps {
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    sh './symfony/vendor/bin/phpcs-meq.sh ./symfony/src/AppBundle'
+                }
+            }
+        }
+
+        stage('PHPUnit Tests') {
+            steps {
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    sh '''
+                        cd symfony
+                        cp phpunit.xml.dist phpunit.xml
+                        ./bin/console cache:warmup --env=test
+                        ./vendor/bin/phpunit\
+                            --coverage-clover '../reports/coverage/coverage.xml'\
+                            --coverage-html '../reports/coverage'\
+                            --log-junit '../reports/unitreport.xml'
+                    '''
+                }
+
+                junit 'reports/unitreport.xml'
+
+                publishHTML([
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: 'reports/coverage',
+                    reportFiles: 'index.html',
+                    reportName: 'PHPUnit Test Coverage Report'
+                ])
+            }
+        }
     }
 }
 /*node {
