@@ -19,7 +19,7 @@ node {
       }
 
       stage("Run tests") {
-        sh "vendor/bin/phpunit"
+        sh "vendor/bin/phpunit tests/ValidatePassTest.php"
       }
 
    }
