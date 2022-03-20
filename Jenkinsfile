@@ -16,9 +16,17 @@ node {
     
     }
     stage('test') {
-            // Run any testing suites
-            sh "./vendor/bin/phpunit tests/ValidatePassTest.php"
+            steps {
+        sh "ls -al"
+        sh 'cd src ;./vendor/bin/phpunit --log-junit=storage/logs/unitreport'
+        echo 'Testing'
+      }
         }
+    stage('Deploy') {
+      steps {
+        sh "/var/lib/jenkins/shells/deploy.php"
+        echo 'Deployed'
+      }
     
     }
       
