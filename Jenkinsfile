@@ -1,47 +1,21 @@
 pipeline {
-  agent any
-  stages {
-    stage('Checkout') {
-      steps {
-        git(url: 'git@github.com:Project-Management-SCE/PM2022_TEAM_13.git', branch: 'main',credentialsId: "jenkinskey")
-      }
-    }
-
-    stage('Test') {
-      parallel {
-        stage('PHP 7.4') {
-          agent {
-            docker {
-              image 'allebb/phptestrunner-74:latest'
-              args '-u root:sudo'
+    agent { docker { image 'composer' } }
+    environment { HOME = '.' }
+    stages {
+        stage('build') {
+            steps {
+                git branch: "main", url: "git@github.com:Project-Management-SCE/PM2022_TEAM_13.git", credentialsId: "jenkinskey"
+                sh 'composer install'
+                sh 'cp .env.example .env'
+                sh 'php artisan key:generate'
             }
-
-          }
-          steps {
-            echo 'Running PHP 7.4 tests...'
-            sh 'php -v'
-            echo 'Installing Composer'
-            sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer'
-            echo 'Installing project composer dependencies...'
-            sh 'cd $WORKSPACE && composer install --no-progress'
-            echo 'Running PHPUnit tests...'
-            sh 'php $WORKSPACE/vendor/bin/phpunit --coverage-html $WORKSPACE/report/clover --coverage-clover $WORKSPACE/report/clover.xml --log-junit $WORKSPACE/report/junit.xml'
-            sh 'chmod -R a+w $PWD && chmod -R a+w $WORKSPACE'
-            sh 'cd src ;./vendor/bin/phpunit --log-junit=storage/logs/unitreport'
-            junit 'report/*.xml'
-          }
         }
-
-      }
+        stage('test') {
+            steps {
+                sh 'vendor/bin/phpunit'    
+            }
+        }
     }
-
-    stage('Release') {
-      steps {
-        echo 'Ready to release etc.'
-      }
-    }
-
-  }
 }
 
 /*node {
