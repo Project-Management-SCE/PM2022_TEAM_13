@@ -5,11 +5,11 @@ node('php') {
 
     stage('Get code from SCM') {
         checkout(
-                [$class: 'GitSCM', branches: [[name: '*/#your-dev-branch#']],
+                [$class: 'GitSCM', branches: [[name: '*/main']],
                  doGenerateSubmoduleConfigurations: false,
                  extensions: [],
                  submoduleCfg: [],
-                 userRemoteConfigs: [[url: '#your-git-link#']]]
+                 userRemoteConfigs: [[url: 'git@github.com:Project-Management-SCE/PM2022_TEAM_13.git']]]
         )
     }
 
