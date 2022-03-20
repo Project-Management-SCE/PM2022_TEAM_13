@@ -16,7 +16,8 @@ node {
     }
     stage('Backend tests') {
          docker.image('codeception/codeception').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
-            sh "vendor/bin/phpunit tests/ValidatePassTest.php"
+            sh "codeception run -c vendor/bin/phpunit tests/ValidatePassTest.php"
+              
         }        
     }
       
