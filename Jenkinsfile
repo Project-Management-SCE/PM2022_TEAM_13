@@ -7,10 +7,12 @@ node {
         docker.image('php:7.4.1').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
            sh 'php --version'
         }
-    }
-      docker.image('composer').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+        
+        docker.image('composer').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
             sh "composer install --optimize-autoloader --ignore-platform-reqs"
         }
+    
     }
+      
     
 }
