@@ -5,7 +5,7 @@ pipeline {
             steps {
                 echo 'Hello world!' 
                 sh 'composer install'
-                 sh 'vendor/phpunit/phpunit/phpunit --bootstrap build/bootstrap.php --configuration phpunit-coverage.xml'
+                 sh 'vendor/bin/phpunit ./tests'
             }
         }
         
