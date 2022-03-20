@@ -9,7 +9,7 @@ node {
         }
         
         docker.image('composer').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
-             sh "composer config -g github-oauth.github.com 64b***554"
+             sh "composer config -g github-oauth.github.com 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"
             sh "composer install --optimize-autoloader --ignore-platform-reqs"
         }
     
