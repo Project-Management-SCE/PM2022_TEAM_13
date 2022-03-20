@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git(url: 'git@github.com:Project-Management-SCE/PM2022_TEAM_13.git', branch: 'main')
+        git(url: 'git@github.com:Project-Management-SCE/PM2022_TEAM_13.git', branch: 'main',credentialsId: "jenkinskey")
       }
     }
 
