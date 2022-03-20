@@ -36,25 +36,7 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            echo 'Always ~ Clean'
-            archive includes: 'composer.phar'
-            sh 'ls -alh'
-            sh 'rm -rf composer.lock'  // OR, 'rm -rf .' ??
-            sh 'rm -rf vendor'
-            // deleteDir() /* clean up our workspace */
-        }
-        success {
-            echo 'I succeeeded!'
-        }
-        failure {
-            echo 'I failed :('
-            mail to: 'nfreear@yahoo.co.uk',
-                subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-                body: "Something is wrong with ${env.BUILD_URL}"
-        }
-    }
+    
 }
 
 
