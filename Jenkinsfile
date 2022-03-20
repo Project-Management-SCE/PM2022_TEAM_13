@@ -11,15 +11,11 @@ node {
         docker.image('composer').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
              sh "composer config -g github-oauth.github.com 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"
             sh "composer install --optimize-autoloader --ignore-platform-reqs"
+            sh "codeception run -c vendor/bin/phpunit tests/ValidatePassTest.php"
         }
     
     }
-    stage('Backend tests') {
-         docker.image('codeception/codeception').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
-            sh "codeception run -c vendor/bin/phpunit tests/ValidatePassTest.php"
-              
-        }        
-    }
+    
       
     
 }
