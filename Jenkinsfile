@@ -40,6 +40,7 @@ pipeline {
                 sh 'composer install --prefer-dist --no-progress --no-suggest --no-interaction --no-scripts'
             }
         }
+    
         stage('Tests') {
             parallel {
                 stage('PHPUnit') {
@@ -57,3 +58,4 @@ pipeline {
             }
         }
     }
+}
