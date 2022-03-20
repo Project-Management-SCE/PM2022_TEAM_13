@@ -7,21 +7,21 @@ node {
         docker.image('php:7.4.1').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
            sh 'php --version'
         }
-        dir('ulid') {
+       
             docker.image('composer').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
              sh "composer config -g github-oauth.github.com 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"
             sh "composer install --optimize-autoloader --ignore-platform-reqs"
             
-             }
+             
          }
         
     
     }
     stage('test') {
          
-        dir('ulid') {
+       
             sh 'php vendor/bin/phpunit'
-        }
+        
       
         }
     
