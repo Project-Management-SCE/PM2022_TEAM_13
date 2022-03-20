@@ -8,7 +8,7 @@ node('php') {
                  doGenerateSubmoduleConfigurations: false,
                  extensions: [],
                  submoduleCfg: [],
-                 userRemoteConfigs: [[url: 'git@github.com:Project-Management-SCE/PM2022_TEAM_13.git']]]
+                 userRemoteConfigs: [[url: '#git@github.com:Project-Management-SCE/PM2022_TEAM_13.git#']]]
         )
     }
 
