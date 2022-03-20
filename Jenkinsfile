@@ -1,5 +1,14 @@
-
 node {
+    stage("composer_install") {
+        // Run `composer update` as a shell script
+        sh 'composer install'
+    }
+    stage("phpunit") {
+        // Run PHPUnit
+        sh 'vendor/bin/phpunit'
+    }
+}
+/*node {
     
    stage('Clone repo') {
         git branch: "main", url: "git@github.com:Project-Management-SCE/PM2022_TEAM_13.git", credentialsId: "jenkinskey"
@@ -25,4 +34,4 @@ node {
     
       
     
-}
+}*/
