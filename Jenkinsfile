@@ -18,7 +18,7 @@ node {
     stage('test') {
          
         sh "ls -al"
-        sh 'cd src ;./vendor/bin/phpunit --log-junit=storage/logs/unitreport'
+        sh './vendor/bin/phpunit --log-junit=storage/logs/unitreport'
         echo 'Testing'
       
         }
