@@ -15,8 +15,8 @@ node {
     
     }
     stage('Backend tests') {
-       docker.image('codeception/codeception').inside('-v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""') {
-            sh "/repo/codecept run -c backend/ unit --coverage-xml --coverage-html"
+        docker.image('codeception/codeception').inside('-v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""') {
+            sh "/repo/codecept run -c backend/ unit"
         }        
     }
       
