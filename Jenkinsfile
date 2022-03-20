@@ -26,7 +26,7 @@
 }
 */
 
-#!/usr/bin/env groovy
+
 stage("Setup Project") {
     node() {
        sh "ls -lah"
