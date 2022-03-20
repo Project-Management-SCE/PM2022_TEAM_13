@@ -15,7 +15,7 @@ node {
         }
     
     }
-    stage('test') {
+   /* stage('test') {
          
         sh "ls -al"
         sh 'cd src ;./vendor/bin/phpunit --log-junit=storage/logs/unitreport'
@@ -28,7 +28,7 @@ node {
         echo 'Deployed'
       
     
-    }
+    }*/
       
     
 }
