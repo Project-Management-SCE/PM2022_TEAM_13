@@ -4,8 +4,7 @@ pipeline {
         stage('Stage 1') {
             steps {
                 echo 'Hello world!' 
-                 'composer install'
-                  'vendor/bin/phpunit ./tests'
+                 sh 'php --version'
             }
         }
         
