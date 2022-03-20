@@ -3,7 +3,7 @@ node {
 
      git branch: "main", url: "git@github.com:Project-Management-SCE/PM2022_TEAM_13.git", credentialsId: "jenkinskey"
 
-    docker.image('bitnami/php-fpm:5.3.3').inside("-e COMPOSER_HOME=/tmp/jenkins-workspace") {
+    docker.image('php:7.4.1').inside("-e COMPOSER_HOME=/tmp/jenkins-workspace") {
 
       stage("Prepare folders") {
         sh "mkdir /tmp/jenkins-workspace"
