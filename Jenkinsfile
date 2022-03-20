@@ -18,11 +18,7 @@ pipeline {
         sh 'docker exec app_name php ./bin/phpunit --coverage-clover=\'reports/coverage/coverage.xml\' --coverage-html=\'reports/coverage\''
       }
     }
-    stage('Coverage') {
-      steps {
-        step([$class: 'CloverPublisher'undefined cloverReportDir: '/reports/coverage'undefined cloverReportFileName: 'coverage.xml'])
-      }
-    }
+    
   }  
 }
 
