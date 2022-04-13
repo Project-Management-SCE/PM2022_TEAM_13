@@ -1,0 +1,456 @@
+body {
+	font-family: 'Assistant', sans-serif;
+	background-color:#e8effc;}
+html {
+  scroll-behavior: smooth;
+}
+.tab {
+  float: right;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  width: 15%;
+  height:auto;
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+th{ 
+        color:#fff;
+            }
+
+/* Style the buttons inside the tab */
+.tab button {
+  display: block;
+  background-color: inherit;
+  color: black;
+  padding: 16px 10px;
+  width: 100%;
+  height:25%;
+  border: none;
+  outline: none;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 20px;
+  font-family:'Assistant', sans-serif;
+  border-radius: 4px;
+  
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #79e4ff9d;
+}
+
+/* Create an active/current "tab button" class */
+.tab button.active {
+  background-color: #79e4ff;
+}
+
+/* Style the tab content */
+.tabcontent {
+text-align: right;
+  float: right;
+  padding: 0px 12px;
+  border: 1px solid #ccc;
+  width: 79%;
+  border-left: none;
+  height: auto;
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-bottom: 150px;
+  background-color: white;
+  color:black;
+  
+  
+}
+
+
+* {box-sizing: border-box}
+
+.tablink {
+  background-color: #c2c2a3;
+  color: white;
+  float: left;
+  border-bottom:4px solid #c2c2a3;
+  border-right:4px solid #c2c2a3;
+  border-radius:2px;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 25%;
+}
+#mybtn1,#mybtn3,#btn4{
+	background-color: #4b84e7;
+	 border-radius:5vw;
+	 color:white;
+	 padding: 0.5vw 0.7vw;
+	 font-family: 'Assistant', sans-serif;
+	  font-size: 2vw;
+  transition: 0.3s;	  
+	  z-index:99;
+  cursor:pointer;
+  margin:2vw;
+}
+
+#mybtn2,#mybtn{
+
+	background-color: #4b84e7;
+	 border-radius:5vw;
+	 color:white;
+	 padding: 0.5vw 0.7vw;
+	 font-family: 'Assistant', sans-serif;
+	  font-size: 2vw;	  
+	  z-index:99;
+  cursor:pointer;
+  margin:2vw;
+}
+.topnav {
+	 transition: top 1.0s;
+   
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #00bfff;
+}
+
+.topnav a {
+  float: right;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 24px 32px;
+  text-decoration: none;
+  font-size: 24px;
+}
+
+.topnav a:hover {
+  background-color: #ffff80;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+ 
+#wrap{height:25vw;
+
+display:block;
+margin:auto;}
+
+@media screen and (max-width: 768px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: left;
+    display: block;
+  }
+  #wrap{height:50vw;}
+  
+  /*#mybtn1,#mybtn3,#btn4{
+	
+	  font-size: 12px;	
+
+  margin:0 ;
+}
+
+#mybtn2,#mybtn{
+	margin:0 ;
+	
+	  font-size: 12px;	  
+	 
+}*/
+  
+}
+
+@media screen and (max-width: 768px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: right;
+  }
+ 
+  
+}
+
+
+
+@media screen and (max-width: 768px) {
+#Logo1{ width="450px"; height="200px" ;}	
+	
+.tab button {padding: 0px; }
+  .tab {width: 100%;height: auto;margin-bottom:0px;padding: 0px;}
+   .tabcontent {width: 100%;   margin-top: 0px; }	
+	
+}
+#navbar {
+  overflow: hidden;
+  background-color: white;
+  padding: 3vw 1vw;
+  transition: 0.4s;
+  position: fixed;
+  width: 95%;
+  top: 0;
+  left: 2.7vw;
+  z-index: 99;
+
+}
+
+#navbar a {
+  float: left;
+  color: black;
+  text-align: center;
+  padding: 0.9vw 1.2vw;
+  text-decoration: none;
+  font-size: 1.9vw; 
+  line-height: 25px;
+  border-radius: 16px;
+}
+
+#navbar #logo {
+  font-size: 2.5vw;
+  font-weight: bold;
+  transition: 0.4s;
+}
+
+#navbar a:hover {
+  background-color: dodgerblue;
+  opacity:0.6;
+  color: black;
+}
+
+#navbar a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+#navbar-right {
+  float: right;
+}
+
+@media screen and (max-width: 580px) {
+
+	#navbar{padding:0.9vw 1.2vw;}
+	#navbar a {
+    float: right;
+    text-align: right;
+	 padding: 0.5vw 1.5vw;
+  }
+  #logo {
+    display: none;
+	
+  }
+  /*.icon{
+    position:fixed;
+    top:0.1vw;
+    right:0.7vw;
+    width:15%;
+  }*/
+ 
+  
+}
+#main{
+	margin-top:14vw;
+	
+	
+}
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #4b84e7;
+  border-radius:2vw;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+  text-align: right;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+	
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 12vw;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color:#e6f9ff;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+   border-radius:4px;
+  width: 35%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+  position: relative;
+  left:250px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  direction:rtl;
+}
+
+/* Float four columns side by side */
+.column {
+  float: right;
+  width: 33%;
+  padding: 25px 25px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.row {margin: 25px 25px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+/* Style the counter cards */
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  text-align: center;
+  background-color: #f1f1f1;
+}
+
+#loader {
+            border: 12px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 12px solid #444444;
+            width: 70px;
+            height: 70px;
+            animation: spin 1s linear infinite;
+        }
+          
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+          
+        .center {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+
+        table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: right;
+  padding: 1.5vw;
+  font-size: 1.2vw;
+
+}
+th{
+
+color: black;
+  background-color:#f2f2f2 ;
+
+
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
