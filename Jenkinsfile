@@ -1,7 +1,7 @@
 node {
   stage("Main") {
 
-     git branch: "main", url: "git@github.com:Project-Management-SCE/PM2022_TEAM_13.git", credentialsId: "jenkins-key"
+     git branch: "main", url: "git@github.com:Project-Management-SCE/PM2022_TEAM_13.git", credentialsId: "jenkinskey"
 
     docker.image('php:7.4.1').inside("-e COMPOSER_HOME=/tmp/jenkins-workspace") {
 
