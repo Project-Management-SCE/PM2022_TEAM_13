@@ -11,7 +11,6 @@
         "slim/slim": "~2.0",
         "slim/views": "0.1.*",
         "twig/twig": "~1.0",
-        "hassankhan/config": "^3.0",
         "ircmaxell/random-lib": "^1.2",
         "rakit/validation": "^1.4"
     }
