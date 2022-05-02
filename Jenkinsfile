@@ -7,7 +7,6 @@ node {
 
       stage("Prepare folders") {
         sh "mkdir /tmp/jenkins-workspace"
-       sh"apt-get install -y libzip-dev \&& docker-php-ext-install zip"
       }
 
       stage("Get Composer") {
