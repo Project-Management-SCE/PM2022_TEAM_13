@@ -15,7 +15,7 @@ node {
       }
 
       stage("Install dependencies") {
-       
+       sh "yum install zip unzip php-zip"
         sh "php composer.phar install"
        
       }
