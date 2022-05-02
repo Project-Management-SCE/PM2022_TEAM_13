@@ -13,7 +13,7 @@ node {
       stage("Get Composer") {
         sh "php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\""
         sh "php composer-setup.php"
-         sh "apt update && apt install -y unzip"
+        
       }
 
       stage("Install dependencies") {
