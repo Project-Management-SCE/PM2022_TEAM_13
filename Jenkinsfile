@@ -15,6 +15,7 @@ node {
       }
 
       stage("Install dependencies") {
+        sh "composer update"
         sh "php composer.phar install"
       }
 
