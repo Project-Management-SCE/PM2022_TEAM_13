@@ -15,7 +15,7 @@ node {
       }
 
       stage("Install dependencies") {
-        sh "sudo apt-get install zip unzip php7.4-zip"
+        sh "apt-get install zip unzip php7.4-zip"
         sh "php composer.phar install"
        
       }
