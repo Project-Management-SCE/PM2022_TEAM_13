@@ -19,7 +19,7 @@ node {
       }
 
       stage("Run tests") {
-        sh "vendor/bin/phpunit tests/ValidatePassTest.php"
+        sh "/tmp/jenkins-workspace/vendor/bin/phpunit tests/ValidatePassTest.php"
       }
 
    }
