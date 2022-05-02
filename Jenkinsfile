@@ -15,7 +15,7 @@ node {
       }
 
       stage("Install dependencies") {
-        sh "php composer install"
+        sh "php composer.phar install"
       }
 
       stage("Run tests") {
