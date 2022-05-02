@@ -17,7 +17,7 @@ node {
       }
 
       stage("Install dependencies") {
-        sh "php composer.phar install"
+        sh "php composer.phar install --prefer-dist"
        
       }
 
