@@ -6,6 +6,7 @@ node {
     docker.image('php:7.4.1').inside("-e COMPOSER_HOME=/tmp/jenkins-workspace") {
 
       stage("Prepare folders") {
+        sh "docker-php-ext-configure zip --with-libzip"
         sh "mkdir /tmp/jenkins-workspace"
        
       }
