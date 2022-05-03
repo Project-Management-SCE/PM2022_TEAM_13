@@ -18,20 +18,18 @@ $mail = new PHPMailer(true);
 
 try {
     //Server settings
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+    $mail->SMTPDebug = 0;                      //Enable verbose debug output
     $mail->isSMTP();                                            //Send using SMTP
     $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-	$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-    $mail->Username   = 'automailer432@gmail.com';                     //SMTP username
-    $mail->Password   = '13323Gunr';                               //SMTP password
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    $mail->Username   = 'impactmailer@gmail.com';                     //SMTP username
+    $mail->Password   = 'impact3163';                               //SMTP password
     $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
     $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-	$mail->CharSet = 'UTF-8';
+    $mail->CharSet = 'UTF-8';
     //Recipients
     $mail->setFrom($email, $name);
-    $mail->addAddress('automailer432@gmail.com'); 
-
-    //Attachments
+    $mail->addAddress('impactmailer@gmail.com'); 
     
 
     //Content
@@ -41,8 +39,7 @@ try {
     $mail->AltBody = ' מספר טלפון:'.$Phonenumber.'  שם מלא: '.$name.'הודעה:'.$message;
 
     $mail->send();
-    echo 'Message has been sent';
-	  header("Location:index.php");
+	header("Location:index.php");
 } catch (Exception $e) {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }
