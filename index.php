@@ -4,6 +4,14 @@ require_once 'core/init.php';
 $user = new User();
 
 if($user->isLoggedIn()){
+    if($user->data()->assigned==0){
+        Redirect::to('userFirstRegister.php');
+    }
+    if($user->data()->confirmed==0){
+        echo "<h1>please activate your account , check your email , if you can't see the email check in spams or contact us</h1><br><a href='logout.php'>התנתק</a>";
+        die();
+    }
+
 	?>
 <!DOCTYPE html>
 <html>
@@ -66,7 +74,7 @@ echo '<button class="openbtn" onclick="openNav()">☰</button>';
 <br><br><br><br><br>
 <div id="about" >
 <p align="center" style="font-size:24px;">
-<strong>free love israel ?מי אנחנו</strong><br><br>
+<strong>impact ?מי אנחנו</strong><br><br>
 <ul dir="rtl">
   <li style="font-size:20px;">בית ההשקעות אימפקט הוקם בשנת 2020 , הוא מבתי ההשקעות החדשנים, המקצועיים, המנוסים והאיכותיים בנוף ההשקעות החברתיות בישראל.</li>
   <br><br>
@@ -81,7 +89,7 @@ echo '<button class="openbtn" onclick="openNav()">☰</button>';
 <br><br>
 <li style="font-size:20px;">  מנהלי ההשקעות מפגינים גמישות ומקצועיות, תוך שימוש במוצרים מורכבים לצד הניהול הסטנדרטי.</li>
 <br><br>
-<li style="font-size:20px;">  Free love israel מפתחת את סקטור השקעות האימפקט בישראל שצפוי להואיל לכלל אזרחי המדינה  .</li>
+<li style="font-size:20px;"> impact מפתחת את סקטור השקעות האימפקט בישראל שצפוי להואיל לכלל אזרחי המדינה  .</li>
 <br><br>
 </ul>
 
@@ -234,7 +242,7 @@ function myFunction() {
 <br><br><br><br><br>
 <div id="about" >
 <p align="center" style="font-size:24px;">
-<strong>free love israel ?מי אנחנו</strong><br><br>
+<strong>impact ?מי אנחנו</strong><br><br>
 <ul dir="rtl">
   <li style="font-size:20px;">בית ההשקעות אימפקט הוקם בשנת 2020 , הוא מבתי ההשקעות החדשנים, המקצועיים, המנוסים והאיכותיים בנוף ההשקעות החברתיות בישראל.</li>
   <br><br>
@@ -249,7 +257,7 @@ function myFunction() {
 <br><br>
 <li style="font-size:20px;">  מנהלי ההשקעות מפגינים גמישות ומקצועיות, תוך שימוש במוצרים מורכבים לצד הניהול הסטנדרטי.</li>
 <br><br>
-<li style="font-size:20px;">  Free love israel מפתחת את סקטור השקעות האימפקט בישראל שצפוי להואיל לכלל אזרחי המדינה  .</li>
+<li style="font-size:20px;">  impact מפתחת את סקטור השקעות האימפקט בישראל שצפוי להואיל לכלל אזרחי המדינה  .</li>
 <br><br>
 </ul>
 
