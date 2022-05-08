@@ -47,11 +47,32 @@ if($user->isLoggedIn()){
 if($user->hasPermission()=="admin"){
 	echo '<div id="mySidebar" class="sidebar">';
 	echo '<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>';
-	echo '<a href="register.php">רישום משתמשים</a>';
-	echo '<a href="register_amuta.php">הוספת עמותות</a>';
-	echo '<a href="register_raise.php">הוספת גיוסים</a>';
-	echo '<a href="update_raise.php">הזנת איסוף גיוסים</a>';
-	echo '<a href="register_project.php">הוספת פרוייקט</a>';
+	echo '<div class="dropdown">';
+    echo '<button onclick="drpfunc(1)" class="dropbtn">הרשמה</button>';
+    echo'<div id="myDropdown1" class="dropdown-content">';
+    echo '<a href="register.php">הרשמת משתמשים</a>';
+    echo '<a href="register_amuta.php">הוספת עמותות</a>';
+    echo '<a href="register_raise.php">הוספת גיוסים</a>';
+    echo '<a href="register_project.php">הוספת פרוייקט</a>';
+    echo '</div>';
+    echo '</div>';
+    echo '<div class="dropdown">';
+    echo '<button onclick="drpfunc(2)" class="dropbtn">עמותות</button>';
+    echo'<div id="myDropdown2" class="dropdown-content">';
+    echo '<a href="update_raise.php">הזנת איסוף גיוסים</a>';
+    echo '<a href="generalData.php">ניהול  פרוייקטים וגיוסים</a>';
+    echo '<a href="UsersData.php">ניהול משתמשים ועמותות</a>';
+    echo '</div>';
+    echo '</div>';
+     echo '<div class="dropdown">';
+    echo '<button onclick="drpfunc(3)" class="dropbtn">פרוייקטים</button>';
+    echo'<div id="myDropdown3" class="dropdown-content">';
+     echo '<a href="projectFiles.php">העלאת קבצי פרוייקט</a>';
+    echo '<a href="downloads.php">ניהול קבצי פרוייקט</a>';
+    echo '<a href="generalData.php">ניהול  פרוייקטים וגיוסים</a>';
+    echo '</div>';
+    echo '</div>'; 
+    echo '<a href="PAA_admin.php">אזור אישי עמותות</a>';
 	echo '</div>';
 }
 ?>
@@ -154,6 +175,29 @@ echo '<button class="openbtn" onclick="openNav()">☰</button>';
 	
 	</body>
 </html>
+
+<script>
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function drpfunc(val) {
+  document.getElementById("myDropdown"+val).classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>
+
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
 function openNav() {

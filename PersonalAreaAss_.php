@@ -124,21 +124,44 @@ if(!$user->isLoggedIn()){
 <h1 align="right" style="padding-bottom:10vw;font-size:5vw;padding-right:25px;position: relative;top: 5vw;" >אזור אישי עמותות</h1>
 </div>
 
+<?php  
 
+require_once 'connectionoop.php';
+
+$username1 = escape($user->data()->username);
+
+
+
+//query to get data from the table
+
+$query = sprintf("SELECT id,Aname,Target,TargetStart,TargetEnd FROM association WHERE username='$username1'");
+//execute query
+$result = $mysqli->query($query);
+
+//loop through the returned data
+$data = array();
+foreach ($result as $row) {
+  $data[] = $row;
+}
+$q=$data[0]['id'];
+
+//free memory associated with result
+$result->close();
+?>
 <br><br>
 <div class="tab">
         <button class="tablinks" onclick="openCity(event, 'Raises2')" id="defaultOpen"><strong>הגיוסים שלי</strong></button>
-        <button class="tablinks" onclick="openCity(event, 'MyAcc')"><strong>מצב חשבון</strong></button>
-        <button class="tablinks" onclick="openCity(event, 'MyPro')"><strong>הפרוייקטים שלי</strong></button>
-        <button class="tablinks" onclick="openCity(event, 'MyTeam')"><strong>הצוות שלי</strong></button>
+        <button class="tablinks" onclick="openCity(event, 'MyAcc');myFunction23(<?php echo $q; ?>)"><strong>מצב חשבון</strong></button>
+        <button class="tablinks" onclick="openCity(event, 'MyPro');myFunction4(<?php echo $q; ?>)"><strong>הפרוייקטים שלי</strong></button>
+        <button class="tablinks" onclick="openCity(event, 'MyTeam');myFunction34(<?php echo $q; ?>)"><strong>הצוות שלי</strong></button>
       </div>
       
       <div id="Raises2" class="tabcontent">
 	   
         <h1 align="center">הגיוסים שלי</h1>
-		<button class="m1" id="mybtn1"> רשימה מלאה</button>
-		<button style="float:left;margin-right:2px;" id="mybtn"> רווחים לפי סוג גיוס</button>
-		<button style="float:left;" id="mybtn2"> רווחי גיוס לאורך זמן</button>
+		<button class="m1" id="mybtn1" onclick="myFunction(<?php echo $q; ?>)"> רשימה מלאה</button>
+		<button style="float:left;margin-right:2px;" onclick="myFunction9(<?php echo $q; ?>)" id="mybtn"> רווחים לפי סוג גיוס</button>
+		<button style="float:left;" onclick="myFunction1(<?php echo $q; ?>)" id="mybtn2"> רווחי גיוס לאורך זמן</button>
 		
         <div id="wrap" style="overflow-y:auto;">
 			<canvas id="mycanvas" ></canvas>			
