@@ -23,7 +23,7 @@ if(!$user->isLoggedIn()){
 <body>
 
 <div id="navbar" class="topnav">
-  <a href="#default" id="logo"><img style="position: absolute;top: 2.5vw;height: 4vw;width: 4vw;" src="impactlogo.jpeg" alt="FreeLoveLogo"></a>
+ <a href="#default" id="logo"><img style="position: absolute;top: 2.5vw;height: 4vw;width: 4vw;" src="impactlogo.jpeg" alt="FreeLoveLogo"></a>
 	<div id="navbar-right">
 	
     <a href="javascript:void(0);" class="icon" onclick="myFunction()">
@@ -80,116 +80,6 @@ if($user->hasPermission()=="admin"){
 echo '<button class="openbtn" onclick="openNav()">☰</button>';
 }
 ?>
-
-<div class="fcf-body">
-
-    <div id="fcf-form">
-    <h1 class="fcf-h3">הזנת פרטי איסוף</h1>
-
-<?php
-	if(Input::exists()){
-	if(Token::check(Input::get('token'))){
-	$validate =new Validate();
-		$validation = $validate->check($_POST, array(
-		
-		'SellPrice'=>array(
-			'numeric'=>true,
-			'required'=>true
-		)
-	));
-	
-	if($validation->passed()){
-		$arr=explode(":",Input::get('Rid'),3);
-		$arr2=explode(" ",$arr[2],4);
-		$id = strtok(Input::get('Rid'), ':');
-		// echo $id.'<br>'.$arr[1].'<br>'.$arr2[3];
-		// die();
-		$mr= new MoneyRaise($id);
-		$ac = new AccountMovement();
-		try{
-			$mr->update(array(
-				'SellPrice' =>Input::get('SellPrice'),
-				'collected' =>1
-			));
-			
-			$ac->create(array(
-				'Aid' =>Input::get('Aid'),
-				'Rid' =>$id,
-				'amount' =>Input::get('SellPrice'),
-				'date'=>$arr2[3],
-				'source'=>$arr[1],
-				'collected'=>1
-			));
-			
-			Session::flash('home','you have updated the raise !');
-			Redirect::to('index.php');
-			
-		}catch(Exception $e){
-			die($e->getMessage());
-		}
-	}
- }
-}
-?>
-<form class="fcf-form-class" action="" method="post" >
-			<div class="fcf-form-group">
-				<label class="fcf-label" for="Aid">מספר עמותה</label>
-				<div class="fcf-input-group" id ="first">
-					<select  name="Aid" id="Aid" class="fcf-form-control" onchange="getRaises(this.value)" >
-						<option value="a"> בחר עמותה</option>
-						
-					  
-							  <?php 
-									require_once "connectionoop.php";
-									$query1 = sprintf("SELECT  id,Aname,Anumber FROM association WHERE 1");
-									//execute query
-									$result1 = $mysqli->query($query1);
-
-									//loop through the returned data
-									
-									foreach ($result1 as $data) {
-									  echo "<option value='". $data['id'] ."'>" .$data['Aname']."-".$data['Anumber']."</option>";  // displaying data in option menu
-									}
-									
-						?>  
-					  
-					  </select>
-				</div>
-			</div>
-			
-			
-		<!--	<div class="fcf-form-group">
-				<label class="fcf-label" for="SellPrice">(אופציונלי)סכום איסוף כולל</label>
-				<div class="fcf-input-group">
-					<input type="text" class="fcf-form-control" name="SellPrice" id="SellPrice" value="<?php echo escape(Input::get('SellPrice'));  ?>" autocomplete="off">
-				</div>
-			</div>
-			
-			
-			
-			
-			 -->
-			
-			<input type="submit" class="fcf-btn fcf-btn-primary fcf-btn-lg fcf-btn-block" value="עדכן גיוס">
-			<input type="hidden" name="token" value="<?php echo Token::generate();?>">
-			
-			</form>	
-	</div>
-</div>	
-
-
-
-
-
-
-</div>
-	</body>
-</html>
- 
-
- <script type="text/javascript" src="js/getRaiseFromAmuta.js"></script>
-
-
 <script>
 function openNav() {
   document.getElementById("mySidebar").style.width = "250px";
@@ -201,6 +91,138 @@ function closeNav() {
   document.getElementById("main").style.marginLeft= "0";
 }
 </script>
+<div class="fcf-body">
+
+    <div id="fcf-form">
+    <h1 class="fcf-h3"> הוסף פרוייקט לעמותה</h1>
+	
+	<?php
+	if(Input::exists()){
+	if(Token::check(Input::get('token'))){
+	$validate =new Validate();
+	$validation = $validate->check($_POST, array(
+		'Aid'=>array(
+			'required'=>true
+			
+		),
+		'Pname'=>array(
+			'required'=>true
+		),
+		'Target'=>array(
+			'numeric'=>true,
+			'required'=>true
+		),
+		'Pstart'=>array(
+			'required'=>true
+		),
+		'Pend'=>array(
+			'required'=>true
+		)
+	));
+	
+	if($validation->passed()){
+		
+		$amut =new Amuta(Input::get('Aid'));
+		$tr = $amut->data()->Target;
+		$pro = new Project();
+		try{
+			$pro->create(array(
+				'Aid' =>Input::get('Aid'),
+				'Pname' =>Input::get('Pname'),
+				'Target' =>Input::get('Target'),
+				'Pstart' =>Input::get('Pstart'),
+				'Pend' =>Input::get('Pend')
+			));
+			if(Input::get('Pend')>$amut->data()->TargetEnd){
+				$amut->update(array(
+				'TargetEnd'=>Input::get('Pend')
+			));
+				
+			}
+			$amut->update(array(
+				'Target'=>$tr+Input::get('Target')
+			));
+			Session::flash('home','you have added the project !');
+			Redirect::to('index.php');
+			
+		}catch(Exception $e){
+			die($e->getMessage());
+		}
+	}else{
+		
+		
+		foreach($validation->errors() as $error){
+			echo '<p align="left">'.$error . '</p>';
+		}
+	}
+	
+	}	
+}
+?>
+		<form class="fcf-form-class" action="" method="post">
+			<div class="fcf-form-group">
+				<label class="fcf-label" for="Aid">מספר עמותה</label>
+				<div class="fcf-input-group">
+					<select id="f4" name="Aid" id="Aid" class="fcf-form-control" >
+						<option value=" "> בחר עמותה</option>
+						
+					  
+							  <?php 
+							  	require_once "connectionoop.php";
+
+									$query1 = sprintf("SELECT  id,Aname,Anumber FROM association WHERE 1");
+									//execute query
+									$result1 = $mysqli->query($query1);
+
+									//loop through the returned data
+									
+									foreach ($result1 as $data) {
+									  echo "<option value='". $data['id'] ."'>" .$data['Aname']."-".$data['Anumber']."</option>";  // displaying data in option menu
+									}
+
+						?>  
+					  
+					  </select>
+				</div>
+			</div>
+			<div class="fcf-form-group">
+				<label class="fcf-label" for="Pname">סוג פרויקט</label>
+				<div class="fcf-input-group">	
+					<input type="text" class="fcf-form-control" name="Pname" id="Pname" value="<?php echo escape(Input::get('Pname'));  ?>" autocomplete="off">
+				</div>	
+			</div>
+			<div class="fcf-form-group">
+				<label class="fcf-label" for="Target">יעד</label>
+				<div class="fcf-input-group">	
+					<input type="text" class="fcf-form-control" name="Target" id="Target" value="<?php echo escape(Input::get('Target'));  ?>" autocomplete="off">
+				</div>	
+			</div>
+			
+			
+			<div class="fcf-form-group">
+				<label class="fcf-label" for="Pstart"> תאריך תחילת פרוייקט</label>
+				<div class="fcf-input-group">	
+					<input type="date" class="fcf-form-control" name="Pstart" id="Pstart" value="<?php echo escape(Input::get('Pstart'));  ?>" autocomplete="off">
+				</div>
+			</div>
+			<div class="fcf-form-group">
+				<label class="fcf-label" for="Pend">תאריך סיום פרוייקט</label>
+				<div class="fcf-input-group">
+					<input type="date" class="fcf-form-control" name="Pend" id="Pend" value="<?php echo escape(Input::get('Pend'));  ?>" autocomplete="off">
+				</div>
+			</div>
+			<input type="submit" class="fcf-btn fcf-btn-primary fcf-btn-lg fcf-btn-block" value=" הוסף פרוייקט">
+			<input type="hidden" name="token" value="<?php echo Token::generate();?>">
+			
+			</form>	
+	</div>
+</div>	
+	</div>
+	</body>
+</html>
+
+
+
 <script>
  
 function myFunction() {

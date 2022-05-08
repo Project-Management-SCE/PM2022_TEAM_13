@@ -11,8 +11,9 @@ $username = $user->data()->username;
  
 header('Content-Type: application/json');
 
+$id = $_GET['q'];
 
-$query1 = sprintf("SELECT id,Aname,Target,TargetStart,TargetEnd FROM association WHERE username='$username'");
+$query1 = sprintf("SELECT id,Aname,Target,TargetStart,TargetEnd FROM association WHERE $id ='$id'");
 //execute query
 $result1 = $mysqli->query($query1);
 

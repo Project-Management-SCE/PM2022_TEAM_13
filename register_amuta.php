@@ -1,8 +1,6 @@
 <?php
 require_once 'core/init.php';
-
 $user = new User();
-
 if(!$user->isLoggedIn()){
 	Redirect::to('index.php');
 	
@@ -79,117 +77,155 @@ if($user->hasPermission()=="admin"){
 if($user->hasPermission()=="admin"){
 echo '<button class="openbtn" onclick="openNav()">☰</button>';
 }
-?>
+?>	
 
 <div class="fcf-body">
 
     <div id="fcf-form">
-    <h1 class="fcf-h3">הזנת פרטי איסוף</h1>
-
-<?php
+    <h1 class="fcf-h3">הוסף עמותה</h1>
+	
+	<?php
 	if(Input::exists()){
 	if(Token::check(Input::get('token'))){
 	$validate =new Validate();
-		$validation = $validate->check($_POST, array(
-		
-		'SellPrice'=>array(
+	$validation = $validate->check($_POST, array(
+		'username'=>array(
+			'required'=>true,
+			'exists'=>'users'	
+		),
+		'Anumber'=>array(
+			'required'=>true,
 			'numeric'=>true,
+			'unique'=>'association'
+		),
+		'Aname'=>array(
+			'required'=>true,
+			'min'=>2,
+			'max'=>80
+		),
+		'Aemail'=>array(
+			'required'=>true,
+			'min'=>2,
+			'max'=>80
+		),
+		
+		'TargetStart'=>array(
 			'required'=>true
+		),
+		'TargetEnd'=>array(
+			'required'=>true
+		),
+		'mobileContact'=>array(
+			'required'=>true,
+			'numeric'=>true
 		)
 	));
 	
 	if($validation->passed()){
-		$arr=explode(":",Input::get('Rid'),3);
-		$arr2=explode(" ",$arr[2],4);
-		$id = strtok(Input::get('Rid'), ':');
-		// echo $id.'<br>'.$arr[1].'<br>'.$arr2[3];
-		// die();
-		$mr= new MoneyRaise($id);
-		$ac = new AccountMovement();
+		Session::flash('success','You registered successfully!');
+		$amut= new Amuta();
 		try{
-			$mr->update(array(
-				'SellPrice' =>Input::get('SellPrice'),
-				'collected' =>1
+			$amut->create(array(
+				'username' =>Input::get('username'),
+				'Aemail' =>Input::get('Aemail'),
+				'Aname' =>Input::get('Aname'),
+				'Anumber' =>Input::get('Anumber'),
+				'TargetStart' =>Input::get('TargetStart'),
+				'TargetEnd' =>Input::get('TargetEnd'),
+				'mobileContact'=>Input::get('mobileContact')
 			));
 			
-			$ac->create(array(
-				'Aid' =>Input::get('Aid'),
-				'Rid' =>$id,
-				'amount' =>Input::get('SellPrice'),
-				'date'=>$arr2[3],
-				'source'=>$arr[1],
-				'collected'=>1
-			));
-			
-			Session::flash('home','you have updated the raise !');
+			Session::flash('home','you have added the association !');
 			Redirect::to('index.php');
 			
 		}catch(Exception $e){
 			die($e->getMessage());
 		}
+	}else{
+		
+		
+		foreach($validation->errors() as $error){
+			echo '<p align="left">'.$error . '</p>';
+		}
 	}
- }
+	
+	}	
 }
 ?>
-<form class="fcf-form-class" action="" method="post" >
+		<form class="fcf-form-class" action="" method="post">
 			<div class="fcf-form-group">
-				<label class="fcf-label" for="Aid">מספר עמותה</label>
-				<div class="fcf-input-group" id ="first">
-					<select  name="Aid" id="Aid" class="fcf-form-control" onchange="getRaises(this.value)" >
-						<option value="a"> בחר עמותה</option>
+				<label class="fcf-label" for="username">שם משתמש</label>
+				<div class="fcf-input-group">
+					<select id="f4" name="username" id="username" class="fcf-form-control" >
+						<option value=" ">select a user</option>
 						
 					  
 							  <?php 
-									require_once "connectionoop.php";
-									$query1 = sprintf("SELECT  id,Aname,Anumber FROM association WHERE 1");
+
+							  require_once "connectionoop.php";
+
+									$query1 = sprintf("SELECT  username,first_name,last_name,email FROM users WHERE 1");
 									//execute query
 									$result1 = $mysqli->query($query1);
 
 									//loop through the returned data
 									
 									foreach ($result1 as $data) {
-									  echo "<option value='". $data['id'] ."'>" .$data['Aname']."-".$data['Anumber']."</option>";  // displaying data in option menu
+									 echo "<option value='". $data['username'] ."'>" .$data['first_name']."-".$data['last_name']."-".$data['email']."</option>";  // displaying data in option menu
 									}
-									
+
 						?>  
 					  
 					  </select>
 				</div>
 			</div>
-			
-			
-		<!--	<div class="fcf-form-group">
-				<label class="fcf-label" for="SellPrice">(אופציונלי)סכום איסוף כולל</label>
+			<div class="fcf-form-group">
+				<label class="fcf-label" for="Aemail">דואר אלקטרוני</label>
+				<div class="fcf-input-group">	
+					<input type="text" class="fcf-form-control" name="Aemail" id="Aemail" value="<?php echo escape(Input::get('Aemail'));  ?>" autocomplete="off">
+				</div>	
+			</div>
+			<div class="fcf-form-group">
+				<label class="fcf-label" for="mobileContact">טלפון ליצירת קשר</label>
+				<div class="fcf-input-group">	
+					<input type="text" class="fcf-form-control" name="mobileContact" id="mobileContact" value="<?php echo escape(Input::get('mobileContact'));  ?>" autocomplete="off">
+				</div>	
+			</div>
+			<div class="fcf-form-group">
+				<label class="fcf-label" for="Aname">שם עמותה</label>
 				<div class="fcf-input-group">
-					<input type="text" class="fcf-form-control" name="SellPrice" id="SellPrice" value="<?php echo escape(Input::get('SellPrice'));  ?>" autocomplete="off">
+					<input type="text" class="fcf-form-control" name="Aname" id="Aname" value="<?php echo escape(Input::get('Aname'));  ?>" autocomplete="off">
+				</div>
+			</div>
+			<div class="fcf-form-group">
+				<label class="fcf-label" for="Anumber">מספר עמותה</label>
+				<div class="fcf-input-group">	
+					<input type="text" class="fcf-form-control" name="Anumber" id="Anumber" value="<?php echo escape(Input::get('Anumber'));  ?>" autocomplete="off">
 				</div>
 			</div>
 			
 			
-			
-			
-			 -->
-			
-			<input type="submit" class="fcf-btn fcf-btn-primary fcf-btn-lg fcf-btn-block" value="עדכן גיוס">
+			<div class="fcf-form-group">
+				<label class="fcf-label" for="TargetStart">תאריך תחילת תוכנית</label>
+				<div class="fcf-input-group">	
+					<input type="date" class="fcf-form-control" name="TargetStart" id="TargetStart" value="<?php echo escape(Input::get('TargetStart'));  ?>" autocomplete="off">
+				</div>
+			</div>
+			<div class="fcf-form-group">
+				<label class="fcf-label" for="TargetEnd">תאריך סיום תוכנית</label>
+				<div class="fcf-input-group">
+					<input type="date" class="fcf-form-control" name="TargetEnd" id="TargetEnd" value="<?php echo escape(Input::get('TargetEnd'));  ?>" autocomplete="off">
+				</div>
+			</div>
+			<input type="submit" class="fcf-btn fcf-btn-primary fcf-btn-lg fcf-btn-block" value="צור עמותה">
 			<input type="hidden" name="token" value="<?php echo Token::generate();?>">
 			
 			</form>	
 	</div>
 </div>	
-
-
-
-
-
-
-</div>
+</div>	
 	</body>
 </html>
- 
-
- <script type="text/javascript" src="js/getRaiseFromAmuta.js"></script>
-
-
 <script>
 function openNav() {
   document.getElementById("mySidebar").style.width = "250px";
@@ -199,17 +235,6 @@ function openNav() {
 function closeNav() {
   document.getElementById("mySidebar").style.width = "0";
   document.getElementById("main").style.marginLeft= "0";
-}
-</script>
-<script>
- 
-function myFunction() {
-  var x = document.getElementById("navbar");
-  if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }
 }
 </script>
 <script>
@@ -226,6 +251,18 @@ function scrollFunction() {
   }
 }
 </script>
+<script>
+ 
+function myFunction() {
+  var x = document.getElementById("navbar");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+</script>
+
 <script>
 /* When the user clicks on the button, 
 toggle between hiding and showing the dropdown content */

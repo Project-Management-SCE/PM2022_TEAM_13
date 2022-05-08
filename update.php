@@ -1,13 +1,18 @@
 <?php
+
+
 require_once 'core/init.php';
 
-$user = new User();
 
+$user = new User();
 if(!$user->isLoggedIn()){
 	Redirect::to('index.php');
 	
 }
+
+
 ?>
+
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
@@ -39,7 +44,7 @@ if(!$user->isLoggedIn()){
 	 <a href="index.php" class="active">דף הבית</a>
   </div> 
 
-</div>
+</div>	
 <?php
 if($user->hasPermission()=="admin"){
 	echo '<div id="mySidebar" class="sidebar">';
@@ -79,117 +84,215 @@ if($user->hasPermission()=="admin"){
 if($user->hasPermission()=="admin"){
 echo '<button class="openbtn" onclick="openNav()">☰</button>';
 }
-?>
-
+?>	
 <div class="fcf-body">
 
     <div id="fcf-form">
-    <h1 class="fcf-h3">הזנת פרטי איסוף</h1>
-
-<?php
-	if(Input::exists()){
-	if(Token::check(Input::get('token'))){
-	$validate =new Validate();
-		$validation = $validate->check($_POST, array(
-		
-		'SellPrice'=>array(
-			'numeric'=>true,
-			'required'=>true
-		)
-	));
+    <h1 class="fcf-h3">שינוי פרטים</h1>
 	
-	if($validation->passed()){
-		$arr=explode(":",Input::get('Rid'),3);
-		$arr2=explode(" ",$arr[2],4);
-		$id = strtok(Input::get('Rid'), ':');
-		// echo $id.'<br>'.$arr[1].'<br>'.$arr2[3];
-		// die();
-		$mr= new MoneyRaise($id);
-		$ac = new AccountMovement();
-		try{
-			$mr->update(array(
-				'SellPrice' =>Input::get('SellPrice'),
-				'collected' =>1
-			));
+	
+<?php
+
+
+
+if(Input::exists2('post','Email')){
+
+		$evalidate = new Validate();
+		
+		$evalidation = $evalidate->check($_POST, array('Email'=>array(
+			'required'=>true,
+			'unique'=>'users'	
+		)));
+		if($evalidation->passed()){
+			try{
+				$user -> update(array(
+					'Email'=>Input::get('Email')
+				));
+				Session::flash('update','your details have been updated!');
+				Redirect::to('update.php');
+			}catch(Exception $e){
+				die($e->getMessage());
+			}
+		
+	}else{
+		foreach($evalidation->errors() as $error){
+			echo '<p align="left">'.$error . '</p>';
 			
-			$ac->create(array(
-				'Aid' =>Input::get('Aid'),
-				'Rid' =>$id,
-				'amount' =>Input::get('SellPrice'),
-				'date'=>$arr2[3],
-				'source'=>$arr[1],
-				'collected'=>1
-			));
 			
-			Session::flash('home','you have updated the raise !');
-			Redirect::to('index.php');
+		}	
 			
-		}catch(Exception $e){
-			die($e->getMessage());
-		}
-	}
- }
+	}	
 }
-?>
-<form class="fcf-form-class" action="" method="post" >
-			<div class="fcf-form-group">
-				<label class="fcf-label" for="Aid">מספר עמותה</label>
-				<div class="fcf-input-group" id ="first">
-					<select  name="Aid" id="Aid" class="fcf-form-control" onchange="getRaises(this.value)" >
-						<option value="a"> בחר עמותה</option>
-						
-					  
-							  <?php 
-									require_once "connectionoop.php";
-									$query1 = sprintf("SELECT  id,Aname,Anumber FROM association WHERE 1");
-									//execute query
-									$result1 = $mysqli->query($query1);
+	
+	
+	else if(Input::exists2('post','username')){
+		$uvalidate = new Validate();
+		
+		$uvalidation = $uvalidate->check($_POST, array(
+			'username'=>array(
+			'required'=>true,
+			'min'=>3,
+			'max'=>25,
+			'unique'=>'users'
+		)));
+		if($uvalidation->passed()){
+			try{
+				
+				$user -> update(array(
+					'username'=>Input::get('username')
+				));
+				Session::flash('update','your details have been updated!');
+				Redirect::to('update.php');
+			}catch(Exception $e){
+				die($e->getMessage());
+			}
+		
+		
+	}else{
+		foreach($uvalidation->errors() as $error){
+			echo '<p align="left">'.$error . '</p>';
+			
+			
+		}	
+			
+	}
+	}	
+	
+	
+	
+	
+	
+	else if(Input::exists2('post','first_name')){
+	
+		$fvalidate = new Validate();
+		
+		$fvalidation = $fvalidate->check($_POST, array(
+			'first_name'=>array(
+			'required'=>true,
+			'min'=>2,
+			'max'=>50
+		)));
+		if($fvalidation->passed()){
+			try{
+				$user -> update(array(
+					'first_name'=>Input::get('first_name')
+				));
+				
+				Session::flash('update','your details have been updated!');
+				Redirect::to('update.php');
+			}catch(Exception $e){
+				die($e->getMessage());
+			}
+		
+	}else{
+		foreach($fvalidation->errors() as $error){
+			echo '<p align="left">'.$error . '</p>';
+			
+			
+		}	
+			
+	}	
+	}
+	
+	else if(Input::exists2('post','last_name')){
+	
+		$lvalidate = new Validate();
+		
+		$lvalidation = $lvalidate->check($_POST, array(
+			'last_name'=>array(
+			'required'=>true,
+			'min'=>3,
+			'max'=>50
+		)));
+		if($lvalidation->passed()){
+			try{
+				$user -> update(array(
+					'last_name'=>Input::get('last_name')
+				));
+				
+				Session::flash('update','your details have been updated!');
+				Redirect::to('update.php');
+			}catch(Exception $e){
+				die($e->getMessage());
+			}
+		
+	}else{
+		foreach($lvalidation->errors() as $error){
+			echo '<p align="left">'.$error . '</p>';
+			
+			
+		}	
+			
+	}	
+	
+	
+	
+		
+	
+		
+	}
+	
 
-									//loop through the returned data
-									
-									foreach ($result1 as $data) {
-									  echo "<option value='". $data['id'] ."'>" .$data['Aname']."-".$data['Anumber']."</option>";  // displaying data in option menu
-									}
-									
-						?>  
-					  
-					  </select>
-				</div>
-			</div>
-			
-			
-		<!--	<div class="fcf-form-group">
-				<label class="fcf-label" for="SellPrice">(אופציונלי)סכום איסוף כולל</label>
-				<div class="fcf-input-group">
-					<input type="text" class="fcf-form-control" name="SellPrice" id="SellPrice" value="<?php echo escape(Input::get('SellPrice'));  ?>" autocomplete="off">
-				</div>
-			</div>
-			
-			
-			
-			
-			 -->
-			
-			<input type="submit" class="fcf-btn fcf-btn-primary fcf-btn-lg fcf-btn-block" value="עדכן גיוס">
-			<input type="hidden" name="token" value="<?php echo Token::generate();?>">
-			
-			</form>	
+
+?>	
+<form action="" method="post">
+	<div class="field">
+		<input type="text" class="fcf-form-control" name="Email" id="Email" value="<?php echo escape($user->data()->email);  ?>" autocomplete="off">
+				<label for="Email"> <input type="submit" class="fcf-btn fcf-btn-primary fcf-btn-lg fcf-btn-block" value="Update Email"></label>
+
 	</div>
-</div>	
+	
+	
+	
+	</form>	
+	
+	
+	<form action="" method="post">
+	<div class="field">
+		<input type="text" class="fcf-form-control" name="username" id="username" value="<?php echo escape($user->data()->username);  ?>" autocomplete="off">
+				<label for="username"><input type="submit" class="fcf-btn fcf-btn-primary fcf-btn-lg fcf-btn-block" value="Update UserName"></label>
 
+	</div>
+	
+	
+	
+	
+	</form>	
+	
+	
+	
+	<form action="" method="post">
+	
+	<div class="field">
+		<input type="text" class="fcf-form-control" name="last_name" id="last_name" value="<?php echo escape($user->data()->last_name);  ?>" autocomplete="off">
+		<label for="last_name"><input type="submit" class="fcf-btn fcf-btn-primary fcf-btn-lg fcf-btn-block" value="Update Last Name"></label>
 
+	</div>
+	
+	
+	
+	
+	</form>	
+	
+	<form action="" method="post">
+	
+	<div class="field">
+		<input type="text" class="fcf-form-control" name="first_name" id="first_name" value="<?php echo escape($user->data()->first_name);  ?>" autocomplete="off">
+		<label for="first_name"><input type="submit" class="fcf-btn fcf-btn-primary fcf-btn-lg fcf-btn-block" value="Update First Name"></label>
 
-
-
+	</div>
+	
+	
+	
+	
+	</form>	
+ </div>
 
 </div>
-	</body>
+</div>
+
+</body>
 </html>
- 
-
- <script type="text/javascript" src="js/getRaiseFromAmuta.js"></script>
-
-
 <script>
 function openNav() {
   document.getElementById("mySidebar").style.width = "250px";
@@ -199,17 +302,6 @@ function openNav() {
 function closeNav() {
   document.getElementById("mySidebar").style.width = "0";
   document.getElementById("main").style.marginLeft= "0";
-}
-</script>
-<script>
- 
-function myFunction() {
-  var x = document.getElementById("navbar");
-  if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }
 }
 </script>
 <script>
@@ -226,6 +318,18 @@ function scrollFunction() {
   }
 }
 </script>
+<script>
+ 
+function myFunction() {
+  var x = document.getElementById("navbar");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+</script>
+
 <script>
 /* When the user clicks on the button, 
 toggle between hiding and showing the dropdown content */
