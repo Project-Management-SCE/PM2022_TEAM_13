@@ -152,8 +152,8 @@ class linedata {
 	
 }
 
-document.getElementById("mybtn2").addEventListener("click", myFunction);
-function myFunction() {
+// document.getElementById("mybtn2").addEventListener("click", myFunction);
+function myFunction1(str) {
 
 var xmlhttp = new XMLHttpRequest();
 
@@ -252,6 +252,6 @@ const myChart = new Chart(ctx,config);
 		
 		   }
 };
-xmlhttp.open("GET", "raisegraphNew.php", true);
+xmlhttp.open("GET", "raisegraphNew.php?q="+str, true);
 xmlhttp.send();
 }
