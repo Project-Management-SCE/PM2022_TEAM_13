@@ -25,8 +25,8 @@ function buildTable3(data){
 	
 	} 
 
-document.addEventListener("DOMContentLoaded", myFunction3);
-function myFunction3() {
+// document.addEventListener("DOMContentLoaded", myFunction3);
+function myFunction34(str) {
 
 var xmlhttp = new XMLHttpRequest();
 
@@ -88,7 +88,7 @@ xmlhttp.onreadystatechange = function() {
         
     }
 };
-xmlhttp.open("GET", "getCrew.php", true);
+xmlhttp.open("GET", "getCrew.php?q="+str, true);
 xmlhttp.send();
 
 }

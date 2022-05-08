@@ -16,7 +16,10 @@ if(!$user->isLoggedIn()){
 }
 $username = $user->data()->username;
 
-$query1 = sprintf("SELECT id,Aname,Target,TargetStart,TargetEnd FROM association WHERE username='$username'");
+
+$id = $_GET['q'];
+
+$query1 = sprintf("SELECT id,Aname,Target,TargetStart,TargetEnd FROM association WHERE id='$id'");
 //execute query
 $result1 = $mysqli->query($query1);
 
@@ -38,6 +41,7 @@ $data = array();
 foreach ($result as $row) {
   $data[] = $row;
 }
+array_push($data,$data1[0]);
 
 //free memory associated with result
 $result->close();

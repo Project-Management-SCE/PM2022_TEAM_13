@@ -61,8 +61,8 @@ class bardata {
 }
 
 
-document.getElementById("mybtn").addEventListener("click", myFunction);
-function myFunction() {
+// document.getElementById("mybtn").addEventListener("click", myFunction);
+function myFunction9(str) {
 
 var xmlhttp = new XMLHttpRequest();
 
@@ -121,6 +121,6 @@ var barGraph = new Chart(ctx, {
 		
 		   }
 };
-xmlhttp.open("GET", "raisegraphNew.php", true);
+xmlhttp.open("GET", "raisegraphNew.php?q="+str, true);
 xmlhttp.send();
 }
