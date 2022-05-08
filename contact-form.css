@@ -16,7 +16,9 @@
     padding-bottom: 10px;
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
-    max-width: 55%;
+
+    max-width: 75%;
+
 }
 
 .fcf-form-group {
@@ -32,10 +34,19 @@
     -ms-flex-align: stretch;
     align-items: stretch;
     width: 100%;
+
+     direction: rtl;
+
+}
+
+.fcf-form-control {
+     text-align: right;
+
 }
 
 .fcf-form-control {
 	 text-align: right;
+
     display: block;
     width: 100%;
     height: calc(1.5em + 0.75rem + 2px);
@@ -50,6 +61,10 @@
     outline: none;
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+     direction: rtl;
+
+
 }
 
 .fcf-form-control:focus {
@@ -58,7 +73,7 @@
 
 select.fcf-form-control[size], select.fcf-form-control[multiple] {
     height: auto;
-    width: 100%;
+
 }
 
 textarea.fcf-form-control {
@@ -111,18 +126,18 @@ label.fcf-label {
     .fcf-btn {
         transition: none;
     }
-	
-	
+
+    
+    
 }
-/*@media screen and (max-width: 600px) {
-	#fcf-form{
-	
-	width:100%;
-	
-	height:40px;
-	
-}*/
-	
+@media screen and (max-width: 600px) {
+    #fcf-form{
+    
+    max-width: 100%;
+    
+}
+    
+
 }
 .fcf-btn:hover {
     color: #212529;
@@ -136,19 +151,25 @@ label.fcf-label {
 
 .fcf-btn-primary {
     color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
+
+    background-color: #0069d9;
+    border-color: #0062cc;
+
+
 }
 
 .fcf-btn-primary:hover {
     color: #fff;
-    background-color: #0069d9;
-    border-color: #0062cc;
+
+    background-color: #0062d2;
+
 }
 
 .fcf-btn-primary:focus, .fcf-btn-primary.focus {
     color: #fff;
-    background-color: #0069d9;
+
+    background-color: #f44336;
+
     border-color: #0062cc;
     box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
 }
