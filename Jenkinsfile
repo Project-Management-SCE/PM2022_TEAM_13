@@ -17,7 +17,7 @@ node {
 
       stage("Install dependencies") {
         sh "php composer.phar install"
-        sh "sudo apt install git-all"
+        sh "install git-all"
        
       }
 
