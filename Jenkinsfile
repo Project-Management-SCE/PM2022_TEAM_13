@@ -25,7 +25,7 @@ node {
       }
       
       stage("deployment"){
-      sh "ssh root@46.101.154.62"
+      ssh "root@46.101.154.62"
       }
 
    }
