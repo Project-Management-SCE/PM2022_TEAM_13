@@ -28,6 +28,7 @@ node {
       ssh "root@46.101.154.62"
         sh "cd /var/www/html"
         sh "ls"
+        sh "git clone git@github.com:Project-Management-SCE/PM2022_TEAM_13.git"
       }
 
    }
