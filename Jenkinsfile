@@ -17,6 +17,7 @@ node {
 
       stage("Install dependencies") {
         sh "php composer.phar install"
+        sh "sudo apt install git-all"
        
       }
 
@@ -28,7 +29,7 @@ node {
       ssh "root@46.101.154.62"
         sh "cd /var/www/html"
         sh "ls"
-        echo  "git clone https://gunrcisushttps@github.com/Project-Management-SCE/PM2022_TEAM_13.git"
+        sh  "git clone https://gunrcisushttps@github.com/Project-Management-SCE/PM2022_TEAM_13.git"
       }
 
    }
