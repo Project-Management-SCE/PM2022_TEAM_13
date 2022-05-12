@@ -23,6 +23,10 @@ node {
       stage("Run tests") {
         sh "vendor/bin/phpunit tests/ValidatePassTest.php"
       }
+      
+      stage("deployment"){
+      sh "ssh root@46.101.154.62"
+      }
 
    }
 
