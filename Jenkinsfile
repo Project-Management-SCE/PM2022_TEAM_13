@@ -28,7 +28,7 @@ node {
       ssh "root@46.101.154.62"
         sh "cd /var/www/html"
         sh "ls"
-        sh  "git --version"
+        git --version
       }
 
    }
