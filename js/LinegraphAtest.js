@@ -20,82 +20,183 @@ function getDates (startDate, endDate) {
   }
   while (currentDate <= endDate) {
     dates.push(currentDate)
-    currentDate = addDays.call(currentDate, 7)
+    currentDate = addDays.call(currentDate, 5)
   }
   return dates
 }
 
+class linedata {
+	 constructor(data) {
+		this.h1=data[0].first_name+ ' '+data[0].last_name +':רווחי השקעות';
+		this.h2=data[0].first_name+ ' '+data[0].last_name +':רווחי השקעות צפויים';
+		this.data=data;
+		this.type = [];//pname
+		this.gain = [];//amount*gainper
+		this.range = [];
+		this.dates = [];
+		this.collected = [];
+		this.Culgain=[];
+		this.estCulgain=[];
+		this.gain2 = [];
+		this.dates2=[];
+		
+	  }
 
+	  
+	  setRange(){
 
-document.getElementById("mybtn2").addEventListener("click", myFunction);
-function myFunction() {
+	  	  for(var i in this.data){
+		  	
+		  	if(this.data[i].payed==1){
+		  		this.dates.push(getDates(new Date(this.data[i].date),new Date(this.data[i].Pend)))
+		  		this.gain.push({amount: this.data[i].amount, Ret:((this.data[i].gainper/100)+1)*this.data[i].amount })
+
+				if(this.data[i].collected==1){
+					this.dates2.push(getDates(new Date(this.data[i].date),new Date(this.data[i].collectdate)))
+					this.gain2.push({amount: this.data[i].amount, Ret:((this.data[i].gainper/100)+1)*this.data[i].amount })
+				}
+		  	}
+		  	
+			
+		  }
+		var size 
+		
+		var incr
+		for(var i in this.dates){
+			size = this.dates[i].length
+			
+			incr = (parseInt(this.gain[i].amount) + parseInt(this.gain[i].Ret))/(size-1)
+			console.log(incr)
+			for(var j in this.dates[i] ){
+				if(j == 0){
+					this.estCulgain.push({x:this.dates[i][j] , y:incr,inv : i ,st:1 , en : 0 , stAm:parseInt(this.gain[i].amount)})
+				}
+				else if (j==this.dates[i].length-1)	{
+					this.estCulgain.push({x:this.dates[i][j] , y:incr,inv : i ,st:0 , en : 1 , stAm:parseInt(this.gain[i].amount)})
+				}
+				else{
+						this.estCulgain.push({x:this.dates[i][j] , y:incr,inv : i ,st:0 , en : 0 , stAm:parseInt(this.gain[i].amount)})
+				}
+					
+				
+				
+
+			}
+		}
+		this.estCulgain.sort(function (a, b) {
+			return new Date(a.x).getTime() - new Date(b.x).getTime();
+			});
+
+		for(var i in this.dates2){
+			size = this.dates2[i].length
+			
+			incr = (parseInt(this.gain2[i].amount) + parseInt(this.gain2[i].Ret))/(size-1)
+			for(var j in this.dates2[i] ){
+				if(j == 0){
+					this.Culgain.push({x:this.dates2[i][j] , y:incr,inv : i ,st:1 , en : 0 , stAm:parseInt(this.gain2[i].amount)})
+				}
+				else if (j==this.dates[i].length-1)	{
+					this.Culgain.push({x:this.dates2[i][j] , y:incr,inv : i ,st:0 , en : 1 , stAm:parseInt(this.gain2[i].amount)})
+				}
+				else{
+						this.Culgain.push({x:this.dates2[i][j] , y:incr,inv : i ,st:0 , en : 0 , stAm:parseInt(this.gain2[i].amount)})
+				}
+					
+				
+
+			}
+		}
+
+		this.Culgain.sort(function (a, b) {
+			return new Date(a.x).getTime() - new Date(b.x).getTime();
+			});
+		console.log(this.estCulgain)
+		  console.log(this.Culgain)
+	  }
+
+	  
+	  setEstCulgain(){
+	  	var amount = 0
+	  	var temp = []
+		  for(var i in this.estCulgain){
+		  		if(this.estCulgain[i].st==1){
+		  			amount -=this.estCulgain[i].stAm
+		  			
+		  		}
+		  		else {
+					amount+= this.estCulgain[i].y
+		  		}
+		  	temp.push({x:this.estCulgain[i].x , y:amount})
+		  	
+
+		  }
+		  this.estCulgain = temp
+		   
+	  }
+	  setCulgain(){
+	  	
+	  	var amount = 0
+	  	var temp = []
+		  for(var i in this.Culgain){
+		  		if(this.Culgain[i].st==1){
+		  			amount -=this.Culgain[i].stAm
+		  			
+		  		}
+		  		else {
+					amount+= this.Culgain[i].y
+		  		}
+
+		  		temp.push({x:this.Culgain[i].x , y:amount})
+		  		
+
+		  }
+		  this.Culgain = temp
+		   
+	  }
+	  getRange(){
+		  return this.range;
+	  }
+	  getGain(){
+		  return this.gain;
+	  }
+	  getCulgain(){
+		  return this.Culgain;
+	  }
+	  getEstCulgain(){
+		  return this.estCulgain;
+	  }
+	  getH1(){
+		  return this.h1;
+	  }
+	  getH2(){
+		  return this.h2;
+	  }
+	  
+	  
+	 
+	  
+	init(){
+		this.setRange();
+		this.setCulgain();
+		this.setEstCulgain();}
+	
+}
+
+function myFunction1(id) {
 
 var xmlhttp = new XMLHttpRequest();
 
 xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
         data2 = JSON.parse(this.responseText);
-		
-	  var type = [];
-	  var gain = [];
-	  var range = [];
-	  var dates =[];
-	  var gains = [];
-	  var gains2=[];
-	  range=getDates(new Date(data2[data2.length-1].TargetStart), new Date(data2[data2.length-1].TargetEnd))
-	  
-	console.log(data2[data2.length-1].TargetStart);
-	console.log(data2[data2.length-1].TargetEnd);
-	
-	  
-	   console.log(range);
-	  
-      for(var i in data2) {
-        
-        type.push("raise type: "+data2[i].type);
-		gain.push( data2[i].SellPrice- (data2[i].amount* data2[i].BuyPrice) );
-		dates.push(new Date(data2[i].EndDate));
-		
-		
-      }
-	  console.log(dates);
-	  console.log(gain);
-	  
-	  
-	  var x= [];
-	  for(let i=0;i<data2.length;i++) {	 
-			for (var j in range){
-				if(range[j]>=dates[i]){x.push({d:range[j],g:gain[i]});break;}
-		}
-	  }
-	  
-	  for (var j in range){
-		  var culgain=0;
-		for(var i in x) {	 
-			if(range[j]>=x[i].d)culgain+=x[i].g;
-		}
-		
-		gains.push({x:range[j] , y:culgain});
-		
-	  }
-	  
-		for (var j in gains){
-			if(gains[3].x<gains[j].x)break;
-			gains2.push({x:gains[j].x,y:gains[j].y});
-			
-		}
-		
-		var he=data2[data2.length-1].Aname+': רווחי גיוסים צפויים';
-		
-		var he2=data2[data2.length-1].Aname+':רווחי גיוסים';
-		console.log(gains2);
-		
+		let Mydata = new linedata(data2);
+		Mydata.init();
 		
 		const data = {
         
         datasets: [{
-            label: he,
-            data: gains,
+            label: Mydata.getH1(),
+            data:Mydata.getCulgain(),
             backgroundColor: "rgba(59, 89, 152, 0.75)",
             borderColor: "rgba(59, 89, 152, 1)",
             pointHoverBackgroundColor: "rgba(59, 89, 152, 1)",
@@ -104,8 +205,8 @@ xmlhttp.onreadystatechange = function() {
             borderWidth: 1
         },
 		{
-            label: he2,
-            data: gains2,
+            label: Mydata.getH2(),
+            data:Mydata.getEstCulgain(),
             backgroundColor: "rgba(211, 72, 54, 0.75)",
             borderColor: "rgba(211, 72, 54, 1)",
             pointHoverBackgroundColor: "rgba(211, 72, 54, 1)",
@@ -120,7 +221,7 @@ xmlhttp.onreadystatechange = function() {
     };
 	
 	const config = {
-		labels:range,
+		labels:Mydata.getEstCulgain().x,
 		type: 'line',
 		data,
 		options :{
@@ -129,20 +230,16 @@ xmlhttp.onreadystatechange = function() {
 			
 			scales : {
 				x : {
-					suggestedMin: data2[data2.length-1].TargetStart,
-                suggestedMax: data2[data2.length-1].TargetEnd,
+					suggestedMin:Mydata.getEstCulgain()[0].x,
 					type : 'time' ,
 					
 					 ticks: {
 			autoSkip: true,
-			maxTicksLimit:5
+			maxTicksLimit:10
 			}
 				},
 				y :{
-			    //max:data2[data2.length-1].Target,
-                //beginAtZero: true
-				suggestedMin: 0,
-                suggestedMax: data2[data2.length-1].Target
+				suggestedMin: 0
 				}
 			}
 		}
@@ -156,7 +253,7 @@ let el = document.getElementById("mycanvas");
         el.parentNode.removeChild(el);
     } 
 	
-	el = document.getElementById("myTableHead");
+	el = document.getElementById("myTableHead4");
 		//If it isn't "undefined" and it isn't "null", then it exists.
     if(typeof(el) != 'undefined' && el != null){
         el.parentNode.removeChild(el);
@@ -180,6 +277,6 @@ const myChart = new Chart(ctx,config);
 		
 		   }
 };
-xmlhttp.open("GET", "raisegraph.php", true);
+xmlhttp.open("GET", "InvestTable.php?q="+id, true);
 xmlhttp.send();
 }
